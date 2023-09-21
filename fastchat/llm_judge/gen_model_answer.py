@@ -112,7 +112,7 @@ def get_model_answers(
                 # some models may error out when generating long outputs
                 try:
                     output_ids = model.generate(
-                        torch.as_tensor(input_ids).cuda(),
+                        input_ids=torch.as_tensor(input_ids).cuda(),
                         do_sample=do_sample,
                         temperature=temperature,
                         max_new_tokens=max_new_token,
@@ -199,6 +199,7 @@ if __name__ == "__main__":
         default="mt_bench",
         help="The name of the benchmark question set.",
     )
+    parser.add_argument("--question-file", type=str, help="Specify the input file.")
     parser.add_argument(
         "--question-begin",
         type=int,
@@ -240,8 +241,10 @@ if __name__ == "__main__":
         import ray
 
         ray.init()
-
-    question_file = f"data/{args.bench_name}/question.jsonl"
+    if args.question_file:
+        question_file = args.question_file
+    else:
+        question_file = f"data/{args.bench_name}/question.jsonl"
     if args.answer_file:
         answer_file = args.answer_file
     else:
@@ -249,6 +252,7 @@ if __name__ == "__main__":
 
     print(f"Output to {answer_file}")
 
+    # print(f"Debug!!!! question_file={question_file}")
     run_eval(
         args.model_path,
         args.model_id,

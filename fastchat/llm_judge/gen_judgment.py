@@ -180,6 +180,7 @@ if __name__ == "__main__":
         default="data/judge_prompts.jsonl",
         help="The file of judge prompts.",
     )
+    parser.add_argument("--data-root", type=str, default="FastChat/fastchat/llm_judge/data")
     parser.add_argument("--judge-model", type=str, default="gpt-4")
     parser.add_argument("--baseline-model", type=str, default="gpt-3.5-turbo")
     parser.add_argument(
@@ -209,9 +210,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    question_file = f"data/{args.bench_name}/question.jsonl"
-    answer_dir = f"data/{args.bench_name}/model_answer"
-    ref_answer_dir = f"data/{args.bench_name}/reference_answer"
+    question_file = f"{args.data_root}/{args.bench_name}/question.jsonl"
+    answer_dir = f"{args.data_root}/{args.bench_name}/model_answer"
+    ref_answer_dir = f"{args.data_root}/{args.bench_name}/reference_answer"
 
     # Load questions
     questions = load_questions(question_file, None, None)
